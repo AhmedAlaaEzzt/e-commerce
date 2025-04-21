@@ -2,6 +2,7 @@ import express from "express";
 import {
   addProductToCart,
   getActiveCartForUser,
+  updateProductInCart,
 } from "../services/cartService";
 import validateJWT from "../middlewares/validateJWT";
 import { ExtendedRequest } from "../types/extendedRequest";
@@ -29,6 +30,19 @@ router.post("/items", validateJWT, async (req: ExtendedRequest, res) => {
   }
 
   const response = await addProductToCart({ userId, productId, quantity });
+  res.status(response.statusCode).send(response.data);
+});
+
+router.put("/items", validateJWT, async (req: ExtendedRequest, res) => {
+  const userId = req?.user?._id;
+  const { productId, quantity } = req.body;
+
+  if (!userId) {
+    res.status(400).json({ message: "User ID is required" });
+    return;
+  }
+
+  const response = await updateProductInCart({ userId, productId, quantity });
   res.status(response.statusCode).send(response.data);
 });
 
