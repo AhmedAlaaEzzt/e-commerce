@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addProductToCart,
+  clearCart,
   deleteProductInCart,
   getActiveCartForUser,
   updateProductInCart,
@@ -63,5 +64,17 @@ router.delete(
     res.status(response.statusCode).send(response.data);
   }
 );
+
+router.delete("/", validateJWT, async (req: ExtendedRequest, res) => {
+  const userId = req?.user?._id;
+
+  if (!userId) {
+    res.status(400).json({ message: "User ID is required" });
+    return;
+  }
+
+  const response = await clearCart({ userId });
+  res.status(response.statusCode).send(response.data);
+});
 
 export default router;
