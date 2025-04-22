@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addProductToCart,
+  checkout,
   clearCart,
   deleteProductInCart,
   getActiveCartForUser,
@@ -74,6 +75,20 @@ router.delete("/", validateJWT, async (req: ExtendedRequest, res) => {
   }
 
   const response = await clearCart({ userId });
+  res.status(response.statusCode).send(response.data);
+});
+
+router.post("/checkout", validateJWT, async (req: ExtendedRequest, res) => {
+  const userId = req?.user?._id;
+  const { address } = req.body;
+
+  if (!userId) {
+    res.status(400).json({ message: "User ID is required" });
+    return;
+  }
+
+  const response = await checkout({ userId, address });
+
   res.status(response.statusCode).send(response.data);
 });
 
