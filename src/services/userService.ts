@@ -63,5 +63,5 @@ export const login = async ({ email, password }: LoginParams) => {
 
 const generateJWT = (data: any) => {
   // [TODO] Ahmed Alaa get the secret from the environment variables
-  return jwt.sign(data, 'pCH%Oy4jQQlQVLm&V)Ui"x"PIlicnA', { expiresIn: "24h" });
+  return jwt.sign(data, process.env.JWT_SECRET || "", { expiresIn: "24h" });
 };
