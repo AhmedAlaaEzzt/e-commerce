@@ -34,6 +34,7 @@ function Navbar() {
   const handleLogout = () => {
     handleCloseUserMenu();
     logout();
+    navigate("/");
   };
 
   const handleLogin = () => {
