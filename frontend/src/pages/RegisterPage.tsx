@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { BASE_URL } from "../constants/baseUrl";
-
+import { useAuth } from "../context/Auth/AuthContext";
 const RegisterPage = () => {
   const [error, setError] = useState("");
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -13,6 +13,8 @@ const RegisterPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
+
+  const { login } = useAuth();
 
   const onSubmit = async () => {
     const firstName = firstNameRef.current?.value;
@@ -22,6 +24,11 @@ const RegisterPage = () => {
     const confirmPassword = confirmPasswordRef.current?.value;
 
     console.log({ firstName, lastName, email, password, confirmPassword });
+
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill all the fields");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -42,9 +49,17 @@ const RegisterPage = () => {
         setError("Failed to register user " + response.statusText);
         throw new Error("Failed to register user");
       }
+
       setError("");
-      const data = await response.json();
-      console.log(data);
+
+      const token = await response.json();
+
+      if (!token) {
+        setError("Failed to register user");
+        throw new Error("Failed to register user");
+      }
+
+      login(email, token);
     } catch (error) {
       console.log(error);
     }
