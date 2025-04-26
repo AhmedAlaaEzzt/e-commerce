@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { BASE_URL } from "../constants/baseUrl";
 import { useAuth } from "../context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 const RegisterPage = () => {
   const [error, setError] = useState("");
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -13,6 +14,7 @@ const RegisterPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const { login } = useAuth();
 
@@ -60,6 +62,7 @@ const RegisterPage = () => {
       }
 
       login(email, token);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

@@ -8,6 +8,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
   );
+  const isAuthenticated = !!token;
 
   const login = (userName: string, token: string) => {
     setUserName(userName);
@@ -24,7 +25,9 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userName, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ userName, token, login, logout, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
