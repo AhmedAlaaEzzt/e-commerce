@@ -4,6 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
+import { ShoppingCart } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
@@ -14,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../context/Auth/AuthContext";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-
+import Badge from "@mui/material/Badge";
 function Navbar() {
   const { userName, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
@@ -39,6 +40,10 @@ function Navbar() {
 
   const handleLogin = () => {
     navigate("/login");
+  };
+
+  const handleCart = () => {
+    navigate("/cart");
   };
 
   return (
@@ -70,7 +75,23 @@ function Navbar() {
               </Typography>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box
+              sx={{
+                flexGrow: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <IconButton
+                aria-label="cart"
+                sx={{ color: "white" }}
+                onClick={handleCart}
+              >
+                <Badge badgeContent={4} color="secondary">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
               {isAuthenticated && (
                 <>
                   <Tooltip title="Open settings">
