@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  addProductToCart,
+  addItemToCart,
   checkout,
   clearCart,
   deleteProductInCart,
@@ -19,7 +19,7 @@ router.get("/", validateJWT, async (req: ExtendedRequest, res) => {
       res.status(400).json({ message: "User ID is required" });
       return;
     }
-    const cart = await getActiveCartForUser({ userId });
+    const cart = await getActiveCartForUser({ userId, populateProducts: true });
 
     res.status(200).json(cart);
   } catch (err) {
@@ -37,7 +37,15 @@ router.post("/items", validateJWT, async (req: ExtendedRequest, res) => {
       return;
     }
 
-    const response = await addProductToCart({ userId, productId, quantity });
+    console.log({ userId, productId, quantity });
+
+    const response = await addItemToCart({ userId, productId, quantity });
+
+    if (!response) {
+      res.status(500).json({ message: "Failed to add item to cart" });
+      return;
+    }
+
     res.status(response.statusCode).send(response.data);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });

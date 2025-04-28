@@ -13,7 +13,7 @@ const app = express();
 const port = 3001;
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5175" }));
+app.use(cors({ origin: "http://localhost:5176" }));
 mongoose
   .connect(process.env.DATABASE_URL || "")
   .then(() => {
