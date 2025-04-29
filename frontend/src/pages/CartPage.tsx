@@ -1,34 +1,79 @@
-import { Button, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useState, useEffect } from "react";
-import { BASE_URL } from "../constants/baseUrl";
-import { useAuth } from "../context/Auth/AuthContext";
+
 import { useCart } from "../context/Cart/CartContext";
+import { useEffect } from "react";
 
 export const CartPage = () => {
-  const { token } = useAuth();
-
   const { cartItems, totalAmount } = useCart();
-  const [error, setError] = useState("");
+
+  useEffect(() => {
+    console.log("CartPage>>>totalAmount>>>", totalAmount);
+  }, [totalAmount]);
 
   return (
-    <Container sx={{ mt: 2 }}>
+    <Container sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
       <Typography variant="h4">My Cart</Typography>
       {!cartItems.length && (
         <Typography variant="h4">No items in cart</Typography>
       )}
-      {cartItems.length > 0 &&
-        cartItems.map((item) => (
-          <div>
-            <img width={32} src={item.image} alt={item.title} />
-            <Typography>{item.title}</Typography>
-            <Typography>{item.quantity}</Typography>
-            <Typography>{item.unitPrice}</Typography>
 
-            <Button>Remove</Button>
-          </div>
-        ))}
-      {error && <Typography color="error">{error}</Typography>}
+      {cartItems.length > 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            alignItems: "start",
+          }}
+        >
+          {cartItems.map((item) => (
+            <Box
+              key={item.productId}
+              sx={{
+                display: "flex",
+                alignItems: "start",
+                gap: 2,
+                border: 3,
+                borderColor: "#f2f2f2",
+                borderRadius: 2,
+                p: 2,
+              }}
+            >
+              <Box>
+                <img width={150} src={item.image} alt={item.title} />
+              </Box>
+              <Box>
+                <Typography variant="h6">{item.title}</Typography>
+                <Typography>
+                  {item.quantity} x {item.unitPrice} EGP
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                <ButtonGroup
+                  variant="contained"
+                  aria-label="Basic button group"
+                >
+                  <Button sx={{ width: "100%" }}>+</Button>
+                  <Button sx={{ width: "100%" }}>-</Button>
+                </ButtonGroup>
+                <Button variant="outlined">Remove</Button>
+              </Box>
+            </Box>
+          ))}
+
+          <Box>
+            <Typography variant="h5">Total Amount</Typography>
+            <Typography>{totalAmount.toFixed(2)} EGP</Typography>
+          </Box>
+        </Box>
+      )}
     </Container>
   );
 };

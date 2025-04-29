@@ -37,11 +37,12 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
       );
 
       setCartItems(cartItemsMapped);
+      setTotalAmount(cart.totalAmount);
     };
     fetchCart();
   }, [token]);
 
-  const addItemToCart = async (productId: number) => {
+  const addItemToCart = async (productId: string) => {
     try {
       setError(null);
       const response = await fetch(`${BASE_URL}/carts/items/`, {
@@ -59,6 +60,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
       }
 
       const cart = await response.json();
+
       if (!cart) {
         setError("Failed to add item to cart");
         throw new Error("Failed to add item to cart");
@@ -74,7 +76,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         })
       );
 
-      setCartItems([...cartItemsMapped]);
+      setCartItems(cartItemsMapped);
       setTotalAmount(cart.totalAmount);
     } catch (error) {
       console.log(error);
