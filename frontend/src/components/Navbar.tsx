@@ -16,8 +16,10 @@ import { useAuth } from "../context/Auth/AuthContext";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Badge from "@mui/material/Badge";
+import { useCart } from "../context/Cart/CartContext";
 function Navbar() {
   const { userName, isAuthenticated, logout } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -58,23 +60,28 @@ function Navbar() {
               width: "100%",
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <AdbIcon sx={{ display: "flex", mr: 1 }} />
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  fontWeight: 700,
-                }}
-              >
-                Tech Hub
-              </Typography>
-            </Box>
-
+            <Button
+              variant="text"
+              sx={{ color: "white" }}
+              onClick={() => navigate("/")}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <AdbIcon sx={{ display: "flex", mr: 1 }} />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="a"
+                  sx={{
+                    mr: 2,
+                    display: { xs: "none", md: "flex" },
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                  }}
+                >
+                  Tech Hub
+                </Typography>
+              </Box>
+            </Button>
             <Box
               sx={{
                 flexGrow: 0,
@@ -88,7 +95,7 @@ function Navbar() {
                 sx={{ color: "white" }}
                 onClick={handleCart}
               >
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={cartItems.length} color="secondary">
                   <ShoppingCart />
                 </Badge>
               </IconButton>
