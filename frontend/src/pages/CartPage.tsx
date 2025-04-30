@@ -4,8 +4,13 @@ import Container from "@mui/material/Container";
 import { useCart } from "../context/Cart/CartContext";
 
 export const CartPage = () => {
-  const { cartItems, totalAmount, updateItemInCart, removeItemFromCart } =
-    useCart();
+  const {
+    cartItems,
+    totalAmount,
+    updateItemInCart,
+    removeItemFromCart,
+    clearCart,
+  } = useCart();
 
   const handleQuantity = (productId: string, quantity: number) => {
     if (quantity < 1) return;
@@ -19,7 +24,10 @@ export const CartPage = () => {
 
   return (
     <Container sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-      <Typography variant="h4">My Cart</Typography>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Typography variant="h4">My Cart</Typography>
+        <Button onClick={clearCart}>Clear Cart</Button>
+      </Box>
       {!cartItems.length && (
         <Typography variant="h4">No items in cart</Typography>
       )}
