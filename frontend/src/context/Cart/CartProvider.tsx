@@ -124,9 +124,52 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  const removeItemFromCart = async (productId: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/carts/items/${productId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        setError("Failed to remove item from cart");
+        throw new Error("Failed to remove item from cart");
+      }
+
+      const cart = await response.json();
+
+      if (!cart) {
+        setError("Failed to parse item to cart");
+        throw new Error("Failed to parse item to cart");
+      }
+
+      const cartItemsMapped: CartItem[] = cart.items.map(
+        ({ product, quantity }: any) => ({
+          productId: product._id,
+          title: product.title,
+          quantity,
+          unitPrice: product.price,
+          image: product.image,
+        })
+      );
+
+      setCartItems(cartItemsMapped);
+      setTotalAmount(cart.totalAmount);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <CartContext.Provider
-      value={{ cartItems, totalAmount, addItemToCart, updateItemInCart }}
+      value={{
+        cartItems,
+        totalAmount,
+        addItemToCart,
+        updateItemInCart,
+        removeItemFromCart,
+      }}
     >
       {children}
     </CartContext.Provider>

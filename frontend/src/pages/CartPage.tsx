@@ -4,11 +4,17 @@ import Container from "@mui/material/Container";
 import { useCart } from "../context/Cart/CartContext";
 
 export const CartPage = () => {
-  const { cartItems, totalAmount, updateItemInCart } = useCart();
+  const { cartItems, totalAmount, updateItemInCart, removeItemFromCart } =
+    useCart();
 
   const handleQuantity = (productId: string, quantity: number) => {
     if (quantity < 1) return;
     updateItemInCart(productId, quantity);
+  };
+
+  const handelRemoveItem = (productId: string) => {
+    console.log("CartPage>>>handelRemoveItem>>>", productId);
+    removeItemFromCart(productId);
   };
 
   return (
@@ -77,7 +83,12 @@ export const CartPage = () => {
                     -
                   </Button>
                 </ButtonGroup>
-                <Button variant="outlined">Remove</Button>
+                <Button
+                  onClick={() => handelRemoveItem(item.productId)}
+                  variant="outlined"
+                >
+                  Remove
+                </Button>
               </Box>
             </Box>
           ))}

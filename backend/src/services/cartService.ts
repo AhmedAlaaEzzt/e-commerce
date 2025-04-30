@@ -184,7 +184,12 @@ export const deleteProductInCart = async ({
   cart.items = otherCartItems;
   cart.totalAmount = total;
 
-  const updatedCart = await cart.save();
+  await cart.save();
+
+  const updatedCart = await getActiveCartForUser({
+    userId,
+    populateProducts: true,
+  });
 
   return { data: updatedCart, statusCode: 200 };
 };
