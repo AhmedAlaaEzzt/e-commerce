@@ -2,14 +2,14 @@ import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 
 import { useCart } from "../context/Cart/CartContext";
-import { useEffect } from "react";
 
 export const CartPage = () => {
-  const { cartItems, totalAmount } = useCart();
+  const { cartItems, totalAmount, updateItemInCart } = useCart();
 
-  useEffect(() => {
-    console.log("CartPage>>>totalAmount>>>", totalAmount);
-  }, [totalAmount]);
+  const handleQuantity = (productId: string, quantity: number) => {
+    if (quantity < 1) return;
+    updateItemInCart(productId, quantity);
+  };
 
   return (
     <Container sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
@@ -60,8 +60,22 @@ export const CartPage = () => {
                   variant="contained"
                   aria-label="Basic button group"
                 >
-                  <Button sx={{ width: "100%" }}>+</Button>
-                  <Button sx={{ width: "100%" }}>-</Button>
+                  <Button
+                    onClick={() =>
+                      handleQuantity(item.productId, item.quantity + 1)
+                    }
+                    sx={{ width: "100%" }}
+                  >
+                    +
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      handleQuantity(item.productId, item.quantity - 1)
+                    }
+                    sx={{ width: "100%" }}
+                  >
+                    -
+                  </Button>
                 </ButtonGroup>
                 <Button variant="outlined">Remove</Button>
               </Box>
